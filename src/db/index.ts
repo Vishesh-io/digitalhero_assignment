@@ -27,14 +27,14 @@ export const pool =
   new Pool({
     connectionString: databaseUrl,
     ssl,
-    max: 3,
-    idleTimeoutMillis: 10000,
+    max: 1,
+    idleTimeoutMillis: 5000,
     connectionTimeoutMillis: 8000,
-    keepAlive: true,
+    allowExitOnIdle: true,
   });
 
 if (process.env.NODE_ENV !== "production") {
   globalForDb.__arenaNextJsPostgresqlPool = pool;
 }
 
-export const db = drizzle(pool);
+export const db = drizzle(pool, { casing: undefined });
