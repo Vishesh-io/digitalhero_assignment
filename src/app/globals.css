@@ -1,0 +1,131 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #0a0b0e;
+  --color-panel: #101218;
+  --color-panel2: #14171f;
+  --color-ink: #f4f1ea;
+  --color-mute: #9aa1af;
+  --color-volt: #c7f24e;
+  --color-gold: #f2c94c;
+  --color-ember: #fb7185;
+  --color-mint: #5eead4;
+  --color-line: rgba(244, 241, 234, 0.09);
+
+  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
+
+  --animate-marquee: marquee 42s linear infinite;
+  --animate-float: float 9s ease-in-out infinite;
+  --animate-pulse-slow: pulseSlow 5s ease-in-out infinite;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-14px); }
+}
+@keyframes pulseSlow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-volt);
+  color: #0a0b0e;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0b0e;
+}
+::-webkit-scrollbar-thumb {
+  background: #262a33;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #333947;
+}
+
+/* ------------------------------ component kit ----------------------------- */
+
+.field {
+  @apply w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-ink outline-none transition placeholder:text-mute/50 focus:border-volt/50 focus:bg-white/[0.06];
+}
+
+.field-label {
+  @apply mb-1.5 block text-[11px] font-semibold tracking-[0.14em] text-mute uppercase;
+}
+
+.btn,
+.btn-volt,
+.btn-ghost,
+.btn-gold,
+.btn-danger {
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold tracking-wide transition-all duration-300;
+}
+.btn-volt {
+  @apply bg-volt text-[#0a0b0e] hover:shadow-[0_0_40px_rgba(199,242,78,0.35)] hover:brightness-110 active:scale-[0.98];
+}
+.btn-ghost {
+  @apply border border-white/15 text-ink hover:border-volt/50 hover:text-volt active:scale-[0.98];
+}
+.btn-gold {
+  @apply bg-gold text-[#0a0b0e] hover:brightness-110 active:scale-[0.98];
+}
+.btn-danger {
+  @apply border border-ember/40 text-ember hover:bg-ember/10 active:scale-[0.98];
+}
+
+.card {
+  @apply rounded-2xl border border-line bg-white/[0.03] backdrop-blur-sm;
+}
+
+.kicker {
+  @apply text-[11px] font-bold tracking-[0.28em] text-volt uppercase;
+}
+
+.chip {
+  @apply inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.05] px-3 py-1 text-xs font-medium text-mute;
+}
+
+.noise::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.glow-volt {
+  background: radial-gradient(circle, rgba(199, 242, 78, 0.16), transparent 65%);
+}
+.glow-gold {
+  background: radial-gradient(circle, rgba(242, 201, 76, 0.14), transparent 65%);
+}
+
+.text-gradient-volt {
+  background: linear-gradient(120deg, #f4f1ea 20%, #c7f24e 60%, #f2c94c 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
