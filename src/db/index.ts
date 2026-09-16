@@ -27,8 +27,8 @@ export const pool =
   new Pool({
     connectionString: databaseUrl,
     ssl,
-    max: 15,
-    idleTimeoutMillis: 30000,
+    max: 3,
+    idleTimeoutMillis: 10000,
     connectionTimeoutMillis: 8000,
     keepAlive: true,
   });
