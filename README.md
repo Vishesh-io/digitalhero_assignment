@@ -1,173 +1,122 @@
-# Digital Heroes 🏌️‍♂️❤️🏆
+# Digital Heroes
 
-> **A Golf Performance & Charity Draw Subscription Platform**  
-> Built strictly according to the **Digital Heroes Product Requirements Document (PRD · 2026 Edition)**.
+A subscription platform that combines golf score tracking, monthly prize draws, and charity giving.
 
-[![Next.js](https://img.shields.io/badge/Next.js-16.2.6-black?style=flat&logo=next.js)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue?style=flat&logo=typescript)](https://www.typescriptlang.org/)
-[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-v4-38bdf8?style=flat&logo=tailwindcss)](https://tailwindcss.com/)
-[![Drizzle ORM](https://img.shields.io/badge/Drizzle_ORM-PostgreSQL-C5F74F?style=flat)](https://orm.drizzle.team/)
+[Live demo](#) · [Screenshots](#screenshots) · [PRD](#)
 
----
+![Next.js](https://img.shields.io/badge/Next.js-black?logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-blue?logo=typescript&logoColor=white)
+![Tailwind](https://img.shields.io/badge/Tailwind_v4-38bdf8?logo=tailwindcss&logoColor=white)
+![Drizzle](https://img.shields.io/badge/Drizzle_ORM-PostgreSQL-C5F74F)
 
-## 🌟 Executive Overview
+## How it works
 
-Digital Heroes connects golf enthusiasts, monthly cash prize draws, and charitable giving into a single cohesive platform.
-* **Play:** Members log their rolling 5 latest Stableford scores (1–45).
-* **Give:** At least 10% (configurable up to 100%) of every membership directly funds an approved charity of the member's choice.
-* **Win:** Five random or algorithmic numbers (1–45) are drawn every month. Members matching 3, 4, or 5 numbers share progressive prize tiers, with unclaimed jackpots rolling over to the following month.
+1. **Play:** Members log their five most recent Stableford scores (1–45).
+2. **Give:** At least 10% of each membership (configurable up to 100%) goes to a charity the member chooses.
+3. **Win:** Each month, five numbers (1–45) are drawn. Members matching 3, 4, or 5 share the prize tiers.
 
----
+| Tier | Share of pool | If no winner |
+| :-- | :-- | :-- |
+| 5 matches (jackpot) | 50% + prior rollover | Rolls into next month |
+| 4 matches | 30% | <!-- state behavior --> |
+| 3 matches | 20% | <!-- state behavior --> |
 
-## 🚀 Key Features Built to PRD Specifications
+Draws run in **Random** (CSPRNG) or **Algorithmic** mode (weighted by the distribution of member scores).
 
-### 1. User Roles & Authentication (§ 03)
-* **Guest / Public:** Public landing page, charity directory with search and slug pages, interactive "How it works", dynamic pricing table, and real-time statistics counter.
-* **Hero / Subscriber:** Private dashboard, subscription management (monthly/yearly), rolling 5 Stableford score entry buffer, charity selection & donation ledger, draw history, and winner payout tracking.
-* **Platform Administrator:** Comprehensive admin command center (`/admin`):
-  * Member inspection & score inspection/management.
-  * Charity directory curation (feature/unfeature, create, edit, delete).
-  * Draw simulation and one-click publishing with rollover calculations.
-  * Winner verification workflow (review proof uploads, approve/reject with notes, mark payout completed).
-  * Global platform settings (membership pricing, pool %, min charity %, draw day).
+## Screenshots
 
-### 2. Subscription & Payment System (§ 04)
-* Supports **Monthly (£10 default)** and **Yearly (£100 default)** subscription tiers.
-* Integrated with **Stripe Checkout & Webhooks** with an automatic **Demo Gateway fallback** when Stripe keys are not configured.
-* Complete subscription lifecycle: activation, cancellation (grace period until period end), and resumption.
+<!-- Landing page, member dashboard, admin draw manager -->
 
-### 3. Score Management Engine (§ 05)
-* Strict validation: whole numbers between **1 and 45** (Stableford scale).
-* Constraint: maximum of **one score per calendar date**.
-* FIFO Rolling 5 Buffer: automatically tracks the five most recent rounds to use as active lottery entries for the monthly draw.
+## Features
 
-### 4. Prize Pool & Draw Engine (§ 06 & § 07)
-* Flexible draw modes: **Random** (CSPRNG) or **Algorithmic** (score-distribution weighted).
-* Real-time pool splitting:
-  * **5 Matches (Jackpot):** 50% of pool (+ full rollover from previous months).
-  * **4 Matches:** 30% of pool.
-  * **3 Matches:** 20% of pool.
-* Automatic rollover: if a tier produces no winners, its funds automatically roll into the next draw's pool.
+**Public:** landing page, charity directory with search, pricing table, live stats.
 
-### 5. Charity System & Ledger (§ 08)
-* Charity directory with categorization, impact metrics, and featured charity highlights.
-* Member-allocated pledge percentage (minimum 10%, up to 100%).
-* Immutable donation ledger records every contribution per transaction.
+**Members:** subscription management (monthly £10 / yearly £100 by default), score entry
+(one per date, rolling last five), charity selection and donation history, draw results,
+winnings and payout status.
 
-### 6. Verification & Fraud Prevention (§ 11)
-* Winner proof upload system (scorecard / golf club verification file upload).
-* Admin audit and approval before marking prizes as "paid".
+**Admins (`/admin`):** member and score management, charity curation, draw simulation and
+publishing, winner proof review and payout marking, and global settings (pricing, pool
+percentages, minimum charity %, draw day).
 
----
+**Payments:** Stripe Checkout and webhooks. With no Stripe keys set, a demo gateway
+simulates the flow so you can run everything locally.
 
-## 🔑 Demo Logins
+## Quick start
 
-The database comes pre-seeded with sample users, draws, scores, and charities:
+**Requirements:** Node 20.9+, npm 9+, a PostgreSQL database (local, Neon, or Supabase).
 
-| Role | Email | Password | Access Area |
-| :--- | :--- | :--- | :--- |
-| **Administrator** | `admin@digitalheroes.club` | `Admin1234!` | [`/admin`](http://localhost:3000/admin) |
-| **Hero (Member)** | `james@example.com` | `Demo1234!` | [`/dashboard`](http://localhost:3000/dashboard) |
-| **Hero (Member)** | `sarah@example.com` | `Demo1234!` | [`/dashboard`](http://localhost:3000/dashboard) |
-
----
-
-## 🛠️ Getting Started Locally
-
-### Prerequisites
-* **Node.js**: v18.18.0 or later (v20+ recommended)
-* **npm**: v9+ or **pnpm**
-* **PostgreSQL Database**: Supabase, Neon, RDS, or local Postgres.
-
-### Installation
-
-1. **Clone or extract the repository:**
-   ```bash
-   cd digital-heroes-development-plan
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-
-3. **Configure Environment Variables:**
-   Copy `.env.example` to `.env.local` or `.env`:
-   ```bash
-   cp .env.example .env.local
-   ```
-   Add your PostgreSQL connection string:
-   ```env
-   DATABASE_URL="postgresql://postgres:password@host:5432/postgres"
-   ```
-
-4. **Initialize & Seed the Database:**
-   Push schema migrations and seed with demo data:
-   ```bash
-   npm run db:push
-   npm run db:seed
-   ```
-
-5. **Start the Development Server:**
-   ```bash
-   npm run dev
-   ```
-   Open [http://localhost:3000](http://localhost:3000) in your browser.
-
----
-
-## 📦 Available Scripts
-
-* `npm run dev` — Start the local Next.js development server with Turbopack.
-* `npm run build` — Create an optimized production build.
-* `npm run start` — Run the production server.
-* `npm run typecheck` — Run TypeScript validation (`tsc --noEmit`).
-* `npm run lint` — Run ESLint code quality checks.
-* `npm run db:push` — Synchronize Drizzle schema directly with PostgreSQL.
-* `npm run db:seed` — Populate database with test members, scores, charities, and past draws.
-
----
-
-## 🏗️ Architecture & Project Structure
-
-```text
-├── src/
-│   ├── app/                    # Next.js App Router (28 routes)
-│   │   ├── (public pages)      # Landing (/), Pricing, How it works, Charities, Auth
-│   │   ├── admin/              # Command centre: Draws, Charities, Winners, Members, Settings
-│   │   ├── dashboard/          # Member dashboard: Scores, Charity, Draws, Winnings
-│   │   ├── api/                # REST endpoints: Auth, Scores, Billing, Admin, Webhooks
-│   │   ├── layout.tsx          # Root layout with Top Progress bar & font injection
-│   │   └── globals.css         # Tailwind CSS v4 design system
-│   ├── components/             # Reusable UI & Widget components
-│   │   ├── admin-widgets.tsx   # Draw manager, User score inspector, Settings form
-│   │   ├── admin-managers.tsx  # Charity & Winner verification tables
-│   │   ├── dashboard-widgets.tsx # Score logger, Charity picker, Subscription controls
-│   │   ├── public-forms.tsx    # Auth forms, Stripe checkout buttons
-│   │   └── ui.tsx              # NumberBall, StatusBadge, Section headers
-│   ├── db/                     # Database layer
-│   │   ├── index.ts            # pg.Pool connection pooler
-│   │   ├── schema.ts           # Drizzle PostgreSQL schema definitions
-│   │   └── seed.ts             # Deterministic seed generator
-│   └── lib/                    # Business logic & utilities
-│       ├── auth.ts             # Session cookies & password hashing (scrypt)
-│       ├── core.ts             # Cached settings, score validation, subscription logic
-│       ├── engine.ts           # Draw simulation, matching, & rollover calculations
-│       └── money.ts            # Currency formatting & helpers
-├── drizzle.config.ts           # Drizzle kit configuration
-├── package.json
-└── README.md
+```bash
+git clone <repo-url> && cd digital-heroes-development-plan
+npm install
+cp .env.example .env.local   # then fill in values below
+npm run db:push
+npm run db:seed              # local/dev only
+npm run dev
 ```
 
----
+Open http://localhost:3000.
 
-## 🚢 Deployment Guide (Vercel)
+### Environment variables
 
-1. Push your code to a GitHub / GitLab repository.
-2. Import the project into **[Vercel](https://vercel.com/)**.
-3. In the project settings, add the Environment Variables:
-   * `DATABASE_URL` — Your hosted PostgreSQL connection string (e.g., Supabase / Neon).
-   * `DATABASE_SSL` — Leave unset or set to `true` (remote hosts use SSL).
-   * `STRIPE_SECRET_KEY` (optional)
-   * `STRIPE_WEBHOOK_SECRET` (optional)
-4. Click **Deploy**. Vercel will automatically run `npm run build` and launch the application.
+| Variable | Required | Description |
+| :-- | :-- | :-- |
+| `DATABASE_URL` | Yes | Postgres connection string |
+| `DATABASE_SSL` | No | `true` for most hosted DBs (default) |
+| `STRIPE_SECRET_KEY` | No | Omit to use the demo gateway |
+| `STRIPE_WEBHOOK_SECRET` | No | Required if Stripe is enabled |
+| <!-- add session secret, app URL, storage keys --> | | |
+
+### Testing Stripe locally
+
+```bash
+stripe listen --forward-to localhost:3000/api/webhooks/stripe
+```
+
+## Demo accounts (seeded, development only)
+
+| Role | Email | Password |
+| :-- | :-- | :-- |
+| Admin | admin@digitalheroes.club | Admin1234! |
+| Member | james@example.com | Demo1234! |
+| Member | sarah@example.com | Demo1234! |
+
+> **Never run `db:seed` against production.** These credentials are public.
+
+## Scripts
+
+| Command | Purpose |
+| :-- | :-- |
+| `npm run dev` | Dev server (Turbopack) |
+| `npm run build` / `start` | Production build and server |
+| `npm run typecheck` | `tsc --noEmit` |
+| `npm run lint` | ESLint |
+| `npm run db:push` | Sync Drizzle schema to the database |
+| `npm run db:seed` | Load demo data |
+
+## Project structure
+
+```text
+src/
+├── app/          # Routes: public pages, /admin, /dashboard, /api
+├── components/   # UI, admin, dashboard, and form components
+├── db/           # Drizzle schema, pool connection, seed
+└── lib/          # auth, core (settings, validation), engine (draws), money
+```
+
+## Deployment (Vercel)
+
+1. Push to GitHub and import the repo into Vercel.
+2. Set the environment variables above. Use your provider's **pooled** connection string
+   for `DATABASE_URL`, since serverless functions can exhaust direct connections.
+3. Run `npm run db:push` once against the production database. Do not seed it.
+4. Point your Stripe webhook at `https://<your-domain>/api/webhooks/stripe`.
+5. Make sure proof uploads go to persistent storage (<!-- name it -->), not local disk.
+
+## Known limitations
+
+<!-- e.g. single currency (GBP), no email notifications, manual payouts -->
+
+## License
+
+<!-- MIT / proprietary -->
